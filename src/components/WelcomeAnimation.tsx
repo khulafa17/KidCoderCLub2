@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Sparkles, Heart, Code, Play } from 'lucide-react';
+import { Star, Heart, Code, Play } from 'lucide-react';
 
 // Simple audio context for welcome sounds
 const playWelcomeSound = () => {
   try {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext || window.AudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     
@@ -26,7 +26,12 @@ const playWelcomeSound = () => {
   }
 };
 
-const WelcomeAnimation = ({ onComplete }) => {
+type WelcomeAnimationProps = {
+  onComplete: () => void;
+};
+
+const WelcomeAnimation: React.FC<WelcomeAnimationProps> = ({ onComplete }) => {
+
   const [currentStep, setCurrentStep] = useState(0);
   const [showAnimation, setShowAnimation] = useState(true);
 
@@ -58,7 +63,6 @@ const WelcomeAnimation = ({ onComplete }) => {
   ];
 
   useEffect(() => {
-    // Play welcome sound when animation starts
     playWelcomeSound();
     
     const timer = setInterval(() => {
@@ -78,54 +82,62 @@ const WelcomeAnimation = ({ onComplete }) => {
     return () => clearInterval(timer);
   }, [onComplete]);
 
-  const FloatingCharacter = ({ character, delay, color }) => (
-    <motion.div
-      initial={{ y: 100, opacity: 0, rotate: -10 }}
-      animate={{ 
-        y: [0, -20, 0], 
-        opacity: 1, 
-        rotate: [0, 10, -5, 0],
-        scale: [1, 1.1, 1]
-      }}
-      transition={{ 
-        duration: 2, 
-        delay,
-        repeat: Infinity,
-        repeatType: "reverse"
-      }}
-      className={`text-6xl ${color} absolute`}
-      style={{
-        left: `${Math.random() * 80 + 10}%`,
-        top: `${Math.random() * 60 + 20}%`
-      }}
-    >
-      {character}
-    </motion.div>
-  );
+  type FloatingCharacterProps = {
+  character: string;
+  delay: number;
+  color: string;
+};
 
-  const SparkleEffect = ({ delay }) => (
-    <motion.div
-      initial={{ scale: 0, rotate: 0 }}
-      animate={{ 
-        scale: [0, 1, 0], 
-        rotate: [0, 180, 360],
-        opacity: [0, 1, 0]
-      }}
-      transition={{ 
-        duration: 2, 
-        delay,
-        repeat: Infinity,
-        repeatDelay: 1
-      }}
-      className="absolute"
-      style={{
-        left: `${Math.random() * 90 + 5}%`,
-        top: `${Math.random() * 80 + 10}%`
-      }}
-    >
-      <Sparkles className="w-8 h-8 text-yellow-400" />
-    </motion.div>
-  );
+const FloatingCharacter: React.FC<FloatingCharacterProps> = ({ character, delay, color }) => (
+  <motion.div
+    initial={{ y: 100, opacity: 0, rotate: -10 }}
+    animate={{ 
+      y: [0, -20, 0], 
+      opacity: 1, 
+      rotate: [0, 10, -5, 0],
+      scale: [1, 1.1, 1]
+    }}
+    transition={{ 
+      duration: 2, 
+      delay,
+      repeat: Infinity,
+      repeatType: "reverse"
+    }}
+    className={`text-6xl ${color} absolute`}
+    style={{
+      left: `${Math.random() * 80 + 10}%`,
+      top: `${Math.random() * 60 + 20}%`
+    }}
+  >
+    {character}
+  </motion.div>
+);
+
+
+  const SparkleEffect = ({ delay }: { delay: number }) => (
+  <motion.div
+    initial={{ scale: 0, rotate: 0 }}
+    animate={{ 
+      scale: [0, 1, 0], 
+      rotate: [0, 180, 360],
+      opacity: [0, 1, 0]
+    }}
+    transition={{ 
+      duration: 2, 
+      delay,
+      repeat: Infinity,
+      repeatType: "loop"
+    }}
+    className="absolute text-yellow-300 text-2xl"
+    style={{
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`
+    }}
+  >
+    ✨
+  </motion.div>
+);
+
 
   if (!showAnimation) return null;
 
@@ -163,7 +175,6 @@ const WelcomeAnimation = ({ onComplete }) => {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="bg-white/20 backdrop-blur-lg rounded-3xl p-8 shadow-2xl"
               onAnimationComplete={() => {
-                // Play a soft chime sound when title appears
                 if (currentStep === 0) {
                   setTimeout(playWelcomeSound, 200);
                 }

@@ -1,25 +1,69 @@
-// Firebase configuration
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+// firebaseService.ts
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getDatabase, ref, push, set } from 'firebase/database';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDmp0wxBayGi78HiriFwt8koXU1aR0QbVc",
-  authDomain: "kidcoderclub.firebaseapp.com",
-  projectId: "kidcoderclub",
-  storageBucket: "kidcoderclub.firebasestorage.app",
-  messagingSenderId: "1085479821149",
-  appId: "1:1085479821149:web:ffe66ad61c16d9b5c6d2b4",
-  measurementId: "G-TYJG7GQHVQ"
+export const signInWithGoogle = async () => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    return {
+      success: true,
+      user: {
+        name: user.displayName,
+        email: user.email,
+        uid: user.uid,
+        photoURL: user.photoURL
+      }
+    };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Google sign-in error", error);
+      return {
+        success: false,
+        error: error.message
+      };
+    } else {
+      console.error("Google sign-in error", error);
+      return {
+        success: false,
+        error: String(error)
+      };
+    }
+  }
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const registerStudent = async (data: any) => {
+  try {
+    const db = getDatabase();
+    const newStudentRef = push(ref(db, 'registrations'));
+    await set(newStudentRef, data);
+    return { success: true };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Registration error:", error);
+      return { success: false, error: error.message };
+    } else {
+      console.error("Registration error:", error);
+      return { success: false, error: String(error) };
+    }
+  }
+};
 
-// Initialize Firebase services
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
-
-export default app;
+export const trackEvent = async (eventName: string, eventData: any) => {
+  try {
+    const db = getDatabase();
+    const newEventRef = push(ref(db, 'events/' + eventName));
+    await set(newEventRef, eventData);
+    return { success: true };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Event tracking error:", error);
+      return { success: false, error: error.message };
+    } else {
+      console.error("Event tracking error:", error);
+      return { success: false, error: String(error) };
+    }
+  }
+};

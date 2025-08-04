@@ -1,3 +1,0 @@
-# This is a placeholder for the welcome sound file
-# In a real implementation, you would add actual MP3 files here
-# For now, we're using Web Audio API to generate sounds programmatically

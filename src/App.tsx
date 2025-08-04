@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import WelcomeAnimation from './components/WelcomeAnimation';
 import MusicPlayer from './components/MusicPlayer';
@@ -33,7 +32,7 @@ function App() {
     localStorage.setItem('hasSeenWelcome', 'true');
   };
 
-  const openModal = (type, data) => {
+  const openModal = (type: any, data: any) => {
     setModalData({ isOpen: true, type, data });
   };
 

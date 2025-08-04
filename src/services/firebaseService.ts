@@ -1,123 +1,107 @@
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  doc, 
-  updateDoc, 
-  deleteDoc,
-  query,
-  orderBy,
-  limit,
-  where
-} from 'firebase/firestore';
-import { db } from '../config/firebase';
+// firebaseService.ts
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getDatabase, ref, push, set } from 'firebase/database';
 
-// Registration Service
-export const registerStudent = async (formData) => {
-  try {
-    const docRef = await addDoc(collection(db, 'registrations'), {
-      ...formData,
-      createdAt: new Date(),
-      status: 'pending'
-    });
-    
-    console.log('Registration submitted with ID: ', docRef.id);
-    return { success: true, id: docRef.id };
-  } catch (error) {
-    console.error('Error adding registration: ', error);
-    return { success: false, error: error.message };
-  }
-};
+export const signInWithGoogle = async () => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
 
-// Get all registrations
-export const getRegistrations = async () => {
   try {
-    const q = query(
-      collection(db, 'registrations'), 
-      orderBy('createdAt', 'desc')
-    );
-    const querySnapshot = await getDocs(q);
-    const registrations = [];
-    
-    querySnapshot.forEach((doc) => {
-      registrations.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-    
-    return { success: true, data: registrations };
-  } catch (error) {
-    console.error('Error getting registrations: ', error);
-    return { success: false, error: error.message };
-  }
-};
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-// Contact/Inquiry Service
-export const submitInquiry = async (inquiryData) => {
-  try {
-    const docRef = await addDoc(collection(db, 'inquiries'), {
-      ...inquiryData,
-      createdAt: new Date(),
-      status: 'new'
-    });
-    
-    return { success: true, id: docRef.id };
-  } catch (error) {
-    console.error('Error submitting inquiry: ', error);
-    return { success: false, error: error.message };
-  }
-};
-
-// Newsletter Subscription
-export const subscribeNewsletter = async (email) => {
-  try {
-    // Check if email already exists
-    const q = query(
-      collection(db, 'newsletter'), 
-      where('email', '==', email)
-    );
-    const querySnapshot = await getDocs(q);
-    
-    if (!querySnapshot.empty) {
-      return { success: false, error: 'Email sudah terdaftar' };
+    if (!user) {
+      return {
+        success: false,
+        error: 'User not found in sign-in result.'
+      };
     }
-    
-    const docRef = await addDoc(collection(db, 'newsletter'), {
-      email,
-      subscribedAt: new Date(),
-      active: true
-    });
-    
-    return { success: true, id: docRef.id };
-  } catch (error) {
-    console.error('Error subscribing to newsletter: ', error);
-    return { success: false, error: error.message };
+
+    return {
+      success: true,
+      user: {
+        name: user.displayName,
+        email: user.email,
+        uid: user.uid,
+        photoURL: user.photoURL
+      }
+    };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Google sign-in error:", error);
+      return {
+        success: false,
+        error: error.message
+      };
+    } else {
+      console.error("Google sign-in error:", error);
+      return {
+        success: false,
+        error: String(error)
+      };
+    }
   }
 };
 
-// Analytics Service
-export const trackPageView = async (page) => {
+export const registerStudent = async (data: any) => {
   try {
-    await addDoc(collection(db, 'analytics'), {
+    const db = getDatabase();
+    const newStudentRef = push(ref(db, 'registrations'));
+    await set(newStudentRef, data);
+    return { success: true };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Registration error:", error);
+      return { success: false, error: error.message };
+    } else {
+      console.error("Registration error:", error);
+      return { success: false, error: String(error) };
+    }
+  }
+};
+
+export const trackEvent = async (eventName: string, eventData: any) => {
+  try {
+    const db = getDatabase();
+    const newEventRef = push(ref(db, 'events/' + eventName));
+    await set(newEventRef, eventData);
+    return { success: true };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Event tracking error:", error);
+      return { success: false, error: error.message };
+    } else {
+      console.error("Event tracking error:", error);
+      return { success: false, error: String(error) };
+    }
+  }
+};
+export const trackPageView = async (page: string) => {
+  try {
+    const db = getDatabase();
+    const pageRef = push(ref(db, 'pageViews'));
+    await set(pageRef, {
       page,
-      timestamp: new Date(),
-      type: 'page_view'
+      timestamp: new Date().toISOString()
     });
-  } catch (error) {
-    console.error('Error tracking page view: ', error);
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Page view tracking error:", error);
+    return { success: false, error: error instanceof Error ? error.message : String(error) };
   }
 };
 
-export const trackEvent = async (eventName, eventData = {}) => {
+export const subscribeNewsletter = async (email: string) => {
   try {
-    await addDoc(collection(db, 'analytics'), {
-      eventName,
-      eventData,
-      timestamp: new Date(),
-      type: 'event'
+    const db = getDatabase();
+    const newsletterRef = push(ref(db, 'newsletterSubscribers'));
+    await set(newsletterRef, {
+      email,
+      subscribedAt: new Date().toISOString()
     });
-  } catch (error) {
-    console.error('Error tracking event: ', error);
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Newsletter subscription error:", error);
+    return { success: false, error: error instanceof Error ? error.message : String(error) };
   }
 };
