@@ -1,16 +1,21 @@
 import React from 'react';
 import { Play, Star, Users, Trophy, ArrowRight } from 'lucide-react';
+import HeroAnimation from './HeroAnimation'; // Import the new component
 
 const Hero = () => {
   return (
     <section className="relative overflow-hidden py-20 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
-      {/* Animated Background Elements */}
+      {/* Full-screen background animations */}
+      <HeroAnimation />
+
+      {/* Static Animated Background Elements (kept for texture) */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-300 rounded-full opacity-20 animate-bounce"></div>
-        <div className="absolute top-40 right-20 w-16 h-16 bg-blue-300 rounded-full opacity-20 animate-bounce delay-1000"></div>
-        <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-green-300 rounded-full opacity-20 animate-bounce delay-500"></div>
+        <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-300 rounded-full opacity-10 animate-bounce"></div>
+        <div className="absolute top-40 right-20 w-16 h-16 bg-blue-300 rounded-full opacity-10 animate-bounce delay-1000"></div>
+        <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-green-300 rounded-full opacity-10 animate-bounce delay-500"></div>
       </div>
 
+      {/* Content Layer (with z-index to be on top) */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -29,7 +34,7 @@ const Hero = () => {
               </span>
             </h1>
 
-            <p className="text-lg text-white/90 mb-8 leading-relaxed">
+            <p className="text-lg text-white/90 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Bergabunglah dengan KidCoder Club dan rasakan serunya belajar programming! 
               Dengan mentor berpengalaman dan metode pembelajaran yang menyenangkan, 
               anak-anak akan menjadi programmer cilik yang handal.
@@ -94,32 +99,8 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Content - Hero Illustration */}
-          <div className="relative">
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 transform hover:scale-105 transition-transform duration-500">
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl p-6 text-center">
-                  <div className="text-3xl mb-2">🎮</div>
-                  <div className="text-white font-bold">Scratch</div>
-                </div>
-                <div className="bg-gradient-to-r from-green-400 to-blue-400 rounded-2xl p-6 text-center">
-                  <div className="text-3xl mb-2">🏗️</div>
-                  <div className="text-white font-bold">Minecraft</div>
-                </div>
-                <div className="bg-gradient-to-r from-purple-400 to-pink-400 rounded-2xl p-6 text-center">
-                  <div className="text-3xl mb-2">🐍</div>
-                  <div className="text-white font-bold">Python</div>
-                </div>
-                <div className="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl p-6 text-center">
-                  <div className="text-3xl mb-2">🌐</div>
-                  <div className="text-white font-bold">Web</div>
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">👨‍💻</div>
-                <div className="text-white font-bold text-lg">Belajar Coding Seru!</div>
-              </div>
-            </div>
+          {/* This div is now empty on the right, but keeps the grid structure */}
+          <div className="relative hidden lg:block">
           </div>
         </div>
       </div>

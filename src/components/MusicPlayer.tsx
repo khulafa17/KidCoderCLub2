@@ -116,7 +116,7 @@ const MusicPlayer = () => {
           />
 
           {isPlaying && (
-            <div className="flex space-x-1">
+            <div key={currentSongIndex} className="flex space-x-1">
               <div className="w-1 bg-gradient-to-t from-purple-500 to-pink-500 rounded-full animate-pulse" style={{ height: '12px', animationDelay: '0ms' }}></div>
               <div className="w-1 bg-gradient-to-t from-purple-500 to-pink-500 rounded-full animate-pulse" style={{ height: '16px', animationDelay: '150ms' }}></div>
               <div className="w-1 bg-gradient-to-t from-purple-500 to-pink-500 rounded-full animate-pulse" style={{ height: '10px', animationDelay: '300ms' }}></div>
