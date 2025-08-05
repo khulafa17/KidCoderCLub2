@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
-import bgMusic from '../assets/sounds/bg-music.mp3'; // Pastikan path benar
+import bgMusic1 from '../assets/sounds/bg-music.mp3';
+import bgMusic2 from '../../public/sounds/bg-music - Copy.mp3'; // Menggunakan path relatif dari root project
 
 const MusicPlayer = () => {
+  const playlist = [bgMusic1, bgMusic2]; // Tambahkan semua musik di sini
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.3);
@@ -14,7 +17,6 @@ const MusicPlayer = () => {
       setIsPlaying(true);
     }
 
-    // Mulai audio saat interaksi pertama user
     const handleUserInteraction = () => {
       if (audioRef.current && !isPlaying) {
         audioRef.current.play().then(() => {
@@ -37,6 +39,7 @@ const MusicPlayer = () => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume;
+      audioRef.current.src = playlist[currentSongIndex];
 
       if (isPlaying) {
         audioRef.current.play().catch((e) => {
@@ -47,7 +50,11 @@ const MusicPlayer = () => {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying, isMuted, volume]);
+  }, [isPlaying, isMuted, volume, currentSongIndex, playlist]);
+
+  const handleSongEnd = () => {
+    setCurrentSongIndex((prevIndex) => (prevIndex + 1) % playlist.length);
+  };
 
   const togglePlay = () => {
     setIsPlaying((prev) => {
@@ -125,8 +132,8 @@ const MusicPlayer = () => {
       </div>
 
       {/* Audio element */}
-      <audio ref={audioRef} loop preload="auto">
-        <source src={bgMusic} type="audio/mp3" />
+      <audio ref={audioRef} onEnded={handleSongEnd} preload="auto">
+        <source src={playlist[currentSongIndex]} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
 
