@@ -35,8 +35,8 @@ const WelcomeAnimation: React.FC<WelcomeAnimationProps> = ({ onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showAnimation, setShowAnimation] = useState(true);
 
-  const characters = ['👦', '👧', '🧒', '👶'];
-  const colors = ['text-yellow-400', 'text-pink-400', 'text-blue-400', 'text-green-400'];
+  const characters = ['👦', '👧', '🤖', '🐼', '🦊', '🦄', '🧒', '👶', '💻', '🚀', '💡'];
+  const colors = ['text-yellow-400', 'text-pink-400', 'text-gray-400', 'text-green-400', 'text-orange-400', 'text-indigo-400', 'text-blue-400', 'text-teal-400', 'text-purple-400', 'text-red-400', 'text-cyan-400'];
 
   const steps = [
     {

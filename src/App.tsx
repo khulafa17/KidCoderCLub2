@@ -19,17 +19,10 @@ function App() {
   useEffect(() => {
     // Track page view
     trackPageView('home');
-    
-    // Check if user has seen welcome animation before
-    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
-    if (hasSeenWelcome) {
-      setShowWelcome(false);
-    }
   }, []);
 
   const handleWelcomeComplete = () => {
     setShowWelcome(false);
-    localStorage.setItem('hasSeenWelcome', 'true');
   };
 
   const openModal = (type: any, data: any) => {
