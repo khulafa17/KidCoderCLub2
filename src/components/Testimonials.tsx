@@ -125,7 +125,7 @@ const Testimonials = () => {
         </div>
 
         {/* Testimonial Carousel */}
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-4xl mx-auto overflow-hidden">
           <div 
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
