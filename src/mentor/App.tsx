@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import Sidebar from './components/Layout/Sidebar';
-import Header from './components/Layout/Header';
-import DashboardOverview from './components/Dashboard/DashboardOverview';
-import CoursesSelection from './components/Courses/CoursesSelection';
-import ClassSchedule from './components/Schedule/ClassSchedule';
-import MaterialsManagement from './components/Materials/MaterialsManagement';
-import StudentFeedback from './components/Feedback/StudentFeedback';
-import StudentsData from './components/Students/StudentsData';
-import WhatsAppGroups from './components/WhatsApp/WhatsAppGroups';
+import { useState } from 'react';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import DashboardOverview from './components/DashboardOverview';
+import CoursesSelection from './components/CoursesSelection';
+import ClassSchedule from './components/ClassSchedule';
+import MaterialsManagement from './components/MaterialsManagement';
+import StudentFeedback from './components/StudentFeedback';
+import StudentsData from './components/StudentsData';
+import WhatsAppGroups from './components/WhatsAppGroups';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
