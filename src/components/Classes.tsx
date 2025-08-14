@@ -120,7 +120,7 @@ const Classes = ({ onOpenModal }) => {
           {classes.map((cls, index) => (
             <div
               key={cls.id}
-              className={`group ${cls.bgColor} rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
+              className={`group ${cls.bgColor} rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ; ${
                 index < visibleCards ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
               style={{ transitionDelay: `${index * 200}ms` }}
