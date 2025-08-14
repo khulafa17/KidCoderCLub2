@@ -5,7 +5,7 @@ import MusicPlayer from './components/MusicPlayer';
 import PopupModal from './components/PopupModal';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Classes from './components/Classes';
+import Classes from './components/kelas/Classes';
 import Mentors from './components/Mentors';
 import Gallery from './components/Gallery';
 import Testimonials from './components/Testimonials';
@@ -13,12 +13,18 @@ import Registration from './components/Registration';
 import Footer from './components/Footer';
 import AdminDashboard from './admin/AdminDashboard';
 import { trackPageView } from './services/firebaseService';
+import Checkout from './components/kelas/Checkout';
+
+
+
+
 
 function App() {
   return (
     <Routes>
       <Route path="/*" element={<MainLayout />} />
       <Route path="/admin/*" element={<AdminDashboard />} />
+      <Route path="/checkout/:id" element={<Checkout />} />
     </Routes>
   );
 }

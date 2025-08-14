@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Star, Clock, Users, Trophy, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const Classes = ({ onOpenModal }) => {
+interface ClassesProps {
+  onOpenModal: (type: string, cls: any) => void;
+}
+
+const Classes = ({ onOpenModal }: ClassesProps) => {
   const [visibleCards, setVisibleCards] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -59,9 +65,13 @@ const Classes = ({ onOpenModal }) => {
     }
   ];
 
-  const ProgressBar = ({ progress, color }) => {
+  interface ProgressBarProps {
+    progress: number;
+    color: string;
+  }
+
+  const ProgressBar: React.FC<ProgressBarProps> = ({ progress, color }) => {
     const [currentProgress, setCurrentProgress] = useState(0);
-    
     useEffect(() => {
       const timer = setTimeout(() => {
         setCurrentProgress(progress);
@@ -71,7 +81,7 @@ const Classes = ({ onOpenModal }) => {
 
     return (
       <div className="w-full bg-gray-200 rounded-full h-2">
-        <div 
+        <div
           className={`h-2 rounded-full bg-gradient-to-r ${color} transition-all duration-1000 ease-out`}
           style={{ width: `${currentProgress}%` }}
         ></div>
@@ -79,20 +89,26 @@ const Classes = ({ onOpenModal }) => {
     );
   };
 
-  const StarRating = ({ rating }) => {
+  interface StarRatingProps {
+    rating: number;
+  }
+
+  const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
     return (
       <div className="flex items-center space-x-1">
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
-            className={`w-4 h-4 ${
-              i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-            }`}
+            className={`w-4 h-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
           />
         ))}
         <span className="text-sm font-medium text-gray-700 ml-1">{rating}</span>
       </div>
     );
+  };
+
+  const handleBuyClick = (id: number) => {
+    navigate(`/checkout/${id}`);
   };
 
   return (
@@ -127,9 +143,7 @@ const Classes = ({ onOpenModal }) => {
             >
               {/* Class Header */}
               <div className="text-center mb-6">
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {cls.image}
-                </div>
+                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">{cls.image}</div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">{cls.name}</h3>
                 <p className="text-gray-600 mb-4">{cls.description}</p>
               </div>
@@ -185,14 +199,17 @@ const Classes = ({ onOpenModal }) => {
                   <span className="text-sm text-gray-500">/kelas</span>
                 </div>
                 <div className="space-y-2">
-                  <button 
+                  <button
                     onClick={() => onOpenModal('class', cls)}
                     className={`w-full bg-gradient-to-r ${cls.color} text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300 transform hover:scale-105`}
                   >
                     Lihat Detail
                   </button>
-                  <button className="w-full bg-white border-2 border-gray-200 text-gray-700 py-2 rounded-xl font-medium hover:border-purple-300 transition-all duration-300">
-                  Daftar Sekarang
+                  <button
+                    onClick={() => handleBuyClick(cls.id)}
+                    className="w-full bg-white border-2 border-gray-200 text-gray-700 py-2 rounded-xl font-medium hover:border-purple-300 transition-all duration-300"
+                  >
+                    Beli sekarang
                   </button>
                 </div>
               </div>
