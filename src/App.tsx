@@ -14,10 +14,7 @@ import Footer from './components/Footer';
 import AdminDashboard from './admin/AdminDashboard';
 import { trackPageView } from './services/firebaseService';
 import Checkout from './components/kelas/Checkout';
-
-
-
-
+import AuthFlow from './components/auth/AuthFlow';
 
 function App() {
   return (
@@ -25,6 +22,8 @@ function App() {
       <Route path="/*" element={<MainLayout />} />
       <Route path="/admin/*" element={<AdminDashboard />} />
       <Route path="/checkout/:id" element={<Checkout />} />
+      <Route path="/register" element={<AuthFlow mode="default" />} />
+      <Route path="/admin-login" element={<AuthFlow mode="admin" />} />
     </Routes>
   );
 }
