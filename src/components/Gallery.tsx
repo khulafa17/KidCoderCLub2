@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { X, Eye, Heart, Star, Trophy } from 'lucide-react';
+import { Eye, Heart, Star, Trophy } from 'lucide-react';
 
 const Gallery = ({ onOpenModal }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
   const [filter, setFilter] = useState('all');
 
   const projects = [
@@ -95,9 +94,22 @@ const Gallery = ({ onOpenModal }) => {
       tech: 'Minecraft'
     }
   ];
+  const [likesData, setLikesData] = useState(
+    projects.reduce((acc, project) => {
+      acc[project.id] = project.likes;
+      return acc;
+    }, {})
+  );
 
-  const filteredProjects = filter === 'all' 
-    ? projects 
+  const handleLike = (id) => {
+    setLikesData(prev => ({
+      ...prev,
+      [id]: prev[id] + 1
+    }));
+  };
+
+  const filteredProjects = filter === 'all'
+    ? projects
     : projects.filter(project => project.category === filter);
 
   const categories = [
@@ -175,18 +187,21 @@ const Gallery = ({ onOpenModal }) => {
                   </span>
                 </div>
               </div>
-              
+
               <div className="p-6">
                 <h3 className="text-lg font-bold text-gray-800 mb-2">{project.title}</h3>
                 <p className="text-sm text-gray-600 mb-4">Oleh: {project.student}</p>
                 <p className="text-sm text-gray-700 mb-4 line-clamp-2">{project.description}</p>
-                
+
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <div className="flex items-center space-x-4">
-                    <div className="flex items-center">
-                      <Heart className="w-4 h-4 text-red-500 mr-1" />
-                      <span>{project.likes}</span>
-                    </div>
+                    <button
+                      onClick={() => handleLike(project.id)}
+                      className="flex items-center text-red-500 hover:text-red-600 transition-colors"
+                    >
+                      <Heart className="w-4 h-4 mr-1" />
+                      <span>{likesData[project.id]}</span>
+                    </button>
                     <div className="flex items-center">
                       <Eye className="w-4 h-4 text-blue-500 mr-1" />
                       <span>{project.views}</span>
@@ -201,7 +216,6 @@ const Gallery = ({ onOpenModal }) => {
             </div>
           ))}
         </div>
-
 
         {/* CTA Section */}
         <div className="text-center mt-16">
