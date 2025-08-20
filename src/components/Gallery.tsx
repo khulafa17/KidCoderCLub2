@@ -3,7 +3,7 @@ import { Eye, Heart, Star, Trophy } from 'lucide-react';
 
 const Gallery = ({ onOpenModal }) => {
   const [filter, setFilter] = useState('all');
-
+// Ini Baru
   const projects = [
     {
       id: 1,
