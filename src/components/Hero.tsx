@@ -1,8 +1,24 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Play, Star, Users, Trophy, ArrowRight } from 'lucide-react';
 import HeroAnimation from './HeroAnimation'; // Import the new component
 
 const Hero = () => {
+
+  const letterAnimation = {
+    initial: { y: 0 },
+    animate: (i) => ({
+      y: [0, -12, 0],
+      transition: {
+        delay: i * 0.08,
+        duration: 2.5,
+        repeat: Infinity,
+        repeatType: 'mirror',
+        ease: 'easeInOut',
+      },
+    }),
+  };
+
   return (
     <section className="relative overflow-hidden py-20 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
       {/* Full-screen background animations */}
@@ -27,10 +43,22 @@ const Hero = () => {
               </span>
             </div>
 
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Belajar Coding
-              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                Jadi Seru!
+            <h1 className="font-baloo text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight overflow-visible">
+              <span className="flex justify-center lg:justify-start">
+                {"Belajar Coding".split("").map((char, index) => (
+                  <motion.span key={index} custom={index} initial="initial" animate="animate" variants={letterAnimation} style={{ display: 'inline-block' }}>
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
+              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text">
+                <span className="">
+                  {"Jadi Seru!".split("").map((char, index) => (
+                    <motion.span key={index} custom={index + "Belajar Coding".length} initial="initial" animate="animate" variants={letterAnimation} style={{ display: 'inline-block' }}>
+                      {char}
+                    </motion.span>
+                  ))}
+                </span>
               </span>
             </h1>
 

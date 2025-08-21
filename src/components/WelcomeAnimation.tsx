@@ -47,14 +47,16 @@ const WelcomeAnimation: React.FC<WelcomeAnimationProps> = ({ onComplete }) => {
       bgColor: "from-purple-400 to-pink-500"
     },
     {
-      title: "Belajar Sambil Bermain! 🎮",
+      title: "      Belajar Sambil       Bermain!",
+      titleEmoji: "🎮",
       subtitle: "Scratch • Minecraft • Python",
       description: "Coding jadi mudah dan menyenangkan!",
       icon: <Play className="w-16 h-16 text-blue-500" />,
       bgColor: "from-blue-400 to-cyan-500"
     },
     {
-      title: "Bergabung dengan 500+ Anak! 👫",
+      title: "Bergabung dengan       500+ Anak!",
+      titleEmoji: "👫",
       subtitle: "Komunitas Coding Terbesar",
       description: "Buat teman baru dan belajar bersama!",
       icon: <Heart className="w-16 h-16 text-red-500" />,
@@ -165,7 +167,7 @@ const FloatingCharacter: React.FC<FloatingCharacterProps> = ({ character, delay,
         ))}
 
         {/* Main Content */}
-        <div className="text-center z-10 max-w-2xl mx-auto px-4">
+        <div className="font-baloo text-center z-10 max-w-2xl mx-auto px-4">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -196,12 +198,49 @@ const FloatingCharacter: React.FC<FloatingCharacterProps> = ({ character, delay,
               </motion.div>
 
               <motion.h1
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                variants={{
+                  hidden: { opacity: 0, scale: 0.95 },
+                  visible: {
+                    opacity: 1,
+                    scale: 1,
+                    transition: {
+                      duration: 0.4,
+                      ease: "easeOut",
+                      staggerChildren: 0.05,
+                    },
+                  },
+                }}
+                initial="hidden"
+                animate="visible"
                 className="text-4xl lg:text-6xl font-bold text-white mb-4"
               >
-                {steps[currentStep].title}
+                {steps[currentStep].title.split('').map((char, index) => (
+                  <motion.span
+                    key={index}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { type: 'spring', stiffness: 300, damping: 24 },
+                      },
+                    }}
+                    style={{ display: 'inline-block', whiteSpace: 'pre' }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+                {steps[currentStep].titleEmoji && (
+                  <motion.span
+                    className="ml-2"
+                    style={{ display: 'inline-block'}}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.4 }}
+                  >
+                    {steps[currentStep].titleEmoji}
+                  </motion.span>
+                )}
               </motion.h1>
 
               <motion.h2

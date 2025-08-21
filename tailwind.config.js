@@ -2,7 +2,11 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        baloo: ['"Baloo 2"', 'cursive'],
+      },
+    },
   },
   plugins: [],
 };
